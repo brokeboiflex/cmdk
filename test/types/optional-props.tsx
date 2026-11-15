@@ -36,7 +36,15 @@ const optionalProps = (
   </Command>
 )
 
-const dialogProps = <Command.Dialog overlayClassName={undefined} contentClassName={undefined} container={undefined} />
+const dialogProps = (
+  <Command.Dialog
+    overlayClassName={undefined}
+    contentClassName={undefined}
+    container={undefined}
+    onCloseAutoFocus={undefined}
+    onEscapeKeyDown={undefined}
+  />
+)
 const omittedProps = (
   <Command>
     <Command.Input />

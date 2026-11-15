@@ -27,13 +27,17 @@ type SeparatorProps = DivProps & {
   alwaysRender?: boolean | undefined
 }
 type DialogProps = RadixDialog.DialogProps &
-  Pick<RadixDialog.DialogPortalProps, 'container'> &
-  Pick<RadixDialog.DialogContentProps, 'onCloseAutoFocus' | 'onEscapeKeyDown'> &
   CommandProps & {
     /** Provide a className to the Dialog overlay. */
     overlayClassName?: string | undefined
     /** Provide a className to the Dialog content. */
     contentClassName?: string | undefined
+    /** Provide a custom element the Dialog should portal into. */
+    container?: RadixDialog.DialogPortalProps['container'] | undefined
+    /** Event handler called when focus moves back after the Dialog closes. */
+    onCloseAutoFocus?: RadixDialog.DialogContentProps['onCloseAutoFocus'] | undefined
+    /** Event handler called when the escape key is down. Can be prevented. */
+    onEscapeKeyDown?: RadixDialog.DialogContentProps['onEscapeKeyDown'] | undefined
   }
 type ListProps = Children &
   DivProps & {
