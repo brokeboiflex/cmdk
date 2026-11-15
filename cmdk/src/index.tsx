@@ -130,7 +130,7 @@ type CommandProps = Children &
 type Context = {
   value: (id: string, value: string, keywords?: string[]) => void
   item: (id: string, groupId: string) => () => void
-  group: (id: string) => () => void
+  group: (id: string, ref: React.RefObject<HTMLElement>) => () => void
   filter: () => boolean
   label: string
   getDisablePointerSelection: () => boolean
@@ -192,6 +192,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
   }))
   const allItems = useLazyRef<Set<string>>(() => new Set()) // [...itemIds]
   const allGroups = useLazyRef<Map<string, Set<string>>>(() => new Map()) // groupId → [...itemIds]
+  const groupRefs = useLazyRef<Map<string, React.RefObject<HTMLElement>>>(() => new Map()) // groupId → element ref
   const ids = useLazyRef<Map<string, { value: string; keywords?: string[] }>>(() => new Map()) // id → { value, keywords }
   const listeners = useLazyRef<Set<() => void>>(() => new Set()) // [...rerenders]
   const propsRef = useAsRef(props)
@@ -342,14 +343,16 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
         }
       },
       // Track group lifecycle (mount, unmount)
-      group: (id) => {
+      group: (id, ref) => {
         if (!allGroups.current.has(id)) {
           allGroups.current.set(id, new Set())
         }
+        groupRefs.current.set(id, ref)
 
         return () => {
           ids.current.delete(id)
           allGroups.current.delete(id)
+          groupRefs.current.delete(id)
         }
       },
       filter: () => {
@@ -426,9 +429,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
     groups
       .sort((a, b) => b[1] - a[1])
       .forEach((group) => {
-        const element = listInnerRef.current?.querySelector(
-          `${GROUP_SELECTOR}[${VALUE_ATTR}="${encodeURIComponent(group[0])}"]`,
-        )
+        const element = groupRefs.current.get(group[0])?.current
         element?.parentElement.appendChild(element)
       })
   }
@@ -746,7 +747,7 @@ const Group = React.forwardRef<HTMLDivElement, GroupProps>((props, forwardedRef)
   )
 
   useLayoutEffect(() => {
-    return context.group(id)
+    return context.group(id, ref)
   }, [])
 
   useValue(id, ref, [props.value, props.heading, headingRef])
