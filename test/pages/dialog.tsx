@@ -1,8 +1,10 @@
 import { Command } from 'cmdk'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 
 const Page = () => {
   const [open, setOpen] = React.useState(false)
+  const label = useRouter().query.label as string | undefined
 
   React.useEffect(() => {
     setOpen(true)
@@ -10,7 +12,7 @@ const Page = () => {
 
   return (
     <div>
-      <Command.Dialog open={open} onOpenChange={setOpen}>
+      <Command.Dialog open={open} onOpenChange={setOpen} label={label}>
         <Command.Input placeholder="Search…" />
         <Command.List>
           <Command.Empty>No results.</Command.Empty>

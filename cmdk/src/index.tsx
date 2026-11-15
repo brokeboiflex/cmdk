@@ -950,7 +950,7 @@ const Dialog = React.forwardRef<HTMLDivElement, DialogProps>((props, forwardedRe
           onCloseAutoFocus={onCloseAutoFocus}
           onEscapeKeyDown={onEscapeKeyDown}
         >
-          <RadixDialog.Title style={srOnlyStyles}>{props.label || 'Command Menu'}</RadixDialog.Title>
+          {props.label && <RadixDialog.Title style={srOnlyStyles}>{props.label}</RadixDialog.Title>}
           <Command ref={forwardedRef} {...etc} />
         </RadixDialog.Content>
       </RadixDialog.Portal>
