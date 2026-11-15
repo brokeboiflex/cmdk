@@ -292,7 +292,7 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
         if (value !== ids.current.get(id)?.value) {
           ids.current.set(id, { value, keywords })
           state.current.filtered.items.set(id, score(value, keywords))
-          if (state.current.value === value) {
+          if (state.current.value === value && isRenderedItem(id)) {
             state.current.selectedItemId = id
           }
           schedule(2, () => {
@@ -523,7 +523,19 @@ const Command = React.forwardRef<HTMLDivElement, CommandProps>((props, forwarded
   }
 
   function getItemIdByValue(value: string) {
-    return Array.from(ids.current).find(([, item]) => item.value === value)?.[0]
+    return Array.from(ids.current).find(([id, item]) => item.value === value && isRenderedItem(id))?.[0]
+  }
+
+  /** Whether `id` is an item that is currently rendered, the same check `Item` uses. Groups are not items. */
+  function isRenderedItem(id: string) {
+    if (allGroups.current.has(id)) return false
+    return (
+      // Force-mounted items are not registered
+      !allItems.current.has(id) ||
+      propsRef.current.shouldFilter === false ||
+      !state.current.search ||
+      state.current.filtered.items.get(id) > 0
+    )
   }
 
   function getValidItems() {
