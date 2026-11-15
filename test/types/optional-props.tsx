@@ -20,7 +20,7 @@ const optionalProps = (
   >
     <Command.Input value={undefined} onValueChange={undefined} />
     <Command.List label={undefined}>
-      <Command.Group heading={undefined} value={undefined} forceMount={undefined}>
+      <Command.Group heading={undefined} headingClassName={undefined} value={undefined} forceMount={undefined}>
         <Command.Item
           value={undefined}
           disabled={undefined}

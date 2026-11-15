@@ -67,7 +67,7 @@ type GroupProps = Children &
     /** Optional heading to render for this group. */
     heading?: React.ReactNode
     /** Provide a className to the Heading content. */
-    headingClassName?: string
+    headingClassName?: string | undefined
     /** If no heading is provided, you must provide a value that is unique for this group. */
     value?: string | undefined
     /** Whether this group is forcibly rendered regardless of filtering. */
